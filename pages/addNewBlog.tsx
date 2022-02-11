@@ -1,13 +1,14 @@
 import React, { ReactElement } from 'react';
 import { useState } from 'react';
 import BlogPreview from '../components/BlogPreview';
+import clientPromise from '../lib/mongodb';
 
 interface ContentProps {
 	heading: string;
 	text: string;
 }
 
-const addNewBlog = () => {
+const addNewBlog = ({posts}) => {
 	////// VARIABLES //////
 	const [title, setTitle] = useState('');
 	const [content, setContent] = useState<Array<ContentProps>>([]);
@@ -32,13 +33,26 @@ const addNewBlog = () => {
 		setPreview(preview ? null : <BlogPreview title={title} content={content} />);
 	}
 
+	const publishBlog = async () => {
+		await fetch('/api/blogs', {
+			method: 'POST',
+			body: JSON.stringify({
+				title,
+				content
+			})
+		}).then(() => {
+			console.log("Blog published");
+		})
+	}
+
 	return <div className='flex flex-col'>
 		<div>
 			<button className='text-text-color transition-all text-xl rounded-lg hover:bg-heading-color p-3' onClick={togglePreview}>{preview ? "Edit" : "Preview"}</button>
-			<button className='text-text-color transition-all text-xl rounded-lg hover:bg-heading-color p-3'>Publish Blog</button>
+			<button className='text-text-color transition-all text-xl rounded-lg hover:bg-heading-color p-3' onClick={publishBlog}>Publish Blog</button>
 		</div>
 		{preview ? preview :
 		<div>
+			<p>{posts}</p>
 			<input type="text" className='text-heading-color text-4xl font-bold bg-container-color-1 p-5 ml-4 focus:outline-none' onChange={(e) => setTitle(e.target.value)} value={title} />
 			<div className='flex flex-col'>
 				{content.map((contentSection, index) => <div key={index} className='flex flex-col mb-5'>
