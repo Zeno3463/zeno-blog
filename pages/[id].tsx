@@ -1,43 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+
+interface ContentSegmentProps {
+	heading: string;
+	text: string;
+}
 
 const Blog = () => {
 	////// VARIABLES //////
 	const router = useRouter();
 	const { id } = router.query;
-	const [title, setTitle] = useState('Roadmap To A Web Developer');
-	const [content, setContent] = useState([
-		{
-			heading: "Heading",
-			text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus."
-		},
-		{
-			heading: "Heading",
-			text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus."
-		},
-		{
-			heading: "Heading",
-			text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus."
-		},
-		{
-			heading: "Heading",
-			text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus."
-		},
-		{
-			heading: "Heading",
-			text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus."
-		},
-		{
-			heading: "Heading",
-			text: "<strong>Lorem</strong> ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus."
-		},
-		{
-			heading: "Heading",
-			text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus."
-		},
-	]);
+	const [title, setTitle] = useState('');
+	const [content, setContent] = useState<Array<ContentSegmentProps>>([]);
+
+	const fetchBlog = async () => {
+		await fetch('/api/getBlogByID', {
+			method: 'POST',
+			body: JSON.stringify({id: id})
+		}).then(res => res.json()).then(blog => {
+			setTitle(blog.title);
+			setContent(blog.content)
+		})
+	}
 
 	return <div>
+		<button onClick={fetchBlog}>fetch</button>
 		{/* Display the title of the blog */}
 		<div className='h-screen flex justify-around flex-col'>
 			<div className='flex justify-center'>

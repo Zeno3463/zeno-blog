@@ -1,6 +1,7 @@
 import BlogEmbed from "../components/BlogEmbed"
+import clientPromise from "../lib/mongodb"
 
-export default function Home() {
+export default function Home({blogs}) {
 	return (
 		<div>
 			<div className='h-screen flex justify-around flex-col'>
@@ -20,17 +21,20 @@ export default function Home() {
 				<br />
 				<div className='grid grid-cols-3'>
 					<div className='absolute bg-container-color-2 lg:w-5/6 lg:h-full w-0 h-0 -z-10 m-10 rounded-3xl'></div>
-					<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />
-					<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />
-					<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />
-					<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />
-					<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />
-					<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />
-					<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />
-					<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />
-					<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />
+					{blogs.map((blog) => <BlogEmbed key={blog.id} title={blog.title} description="hello" id={blog.id} />)}
 				</div>
 			</div>
 		</div>
 	)
+}
+
+export async function getStaticProps() {
+	const client = await clientPromise;
+	const db = client.db("Database");
+	const blogs = await db.collection('blogs').find().toArray();
+	return {
+		props: {
+			blogs: JSON.parse(JSON.stringify(blogs))
+		}
+	}
 }

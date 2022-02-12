@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { useState } from 'react';
 import BlogPreview from '../components/BlogPreview';
-import clientPromise from '../lib/mongodb';
+import { v4 } from 'uuid';
 
 interface ContentProps {
 	heading: string;
@@ -34,11 +34,12 @@ const addNewBlog = ({posts}) => {
 	}
 
 	const publishBlog = async () => {
-		await fetch('/api/blogs', {
+		await fetch('/api/addNewBlog', {
 			method: 'POST',
 			body: JSON.stringify({
+				id: v4(),
 				title,
-				content
+				content,
 			})
 		}).then(() => {
 			console.log("Blog published");

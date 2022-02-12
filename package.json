@@ -19,11 +19,13 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "tailwindcss": "^3.0.19",
-    "tls": "^0.0.1"
+    "tls": "^0.0.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/node": "^17.0.17",
     "@types/react": "17.0.39",
+    "@types/uuid": "^8.3.4",
     "eslint": "8.8.0",
     "eslint-config-next": "12.0.10",
     "typescript": "4.5.5"
