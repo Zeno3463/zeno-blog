@@ -13,18 +13,21 @@ const Blog = () => {
 	const [title, setTitle] = useState('');
 	const [content, setContent] = useState<Array<ContentSegmentProps>>([]);
 
-	const fetchBlog = async () => {
-		await fetch('/api/getBlogByID', {
-			method: 'POST',
-			body: JSON.stringify({id: id})
-		}).then(res => res.json()).then(blog => {
-			setTitle(blog.title);
-			setContent(blog.content)
-		})
-	}
+	useEffect(() => {
+		const func = async () => {
+			await fetch('/api/getBlogByID', {
+				method: 'POST',
+				body: JSON.stringify({id: id})
+			}).then(res => res.json()).then(res => {
+				setTitle(res.title);
+				setContent(res.content);
+			})
+		}
+
+		func();
+	})
 
 	return <div>
-		<button onClick={fetchBlog}>fetch</button>
 		{/* Display the title of the blog */}
 		<div className='h-screen flex justify-around flex-col'>
 			<div className='flex justify-center'>
