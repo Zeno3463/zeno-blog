@@ -1,35 +1,9 @@
 import React, { useState } from 'react';
 import BlogEmbed from '../components/BlogEmbed';
+import clientPromise from '../lib/mongodb';
 
-const Categories = () => {
+const Categories = ({listOfCategories}) => {
 	////// VARIABLES //////
-	const listOfCategories = [
-		{name: "Computer Programming", content: [
-			<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />,
-			<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />,
-			<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />,
-			<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />,
-			<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />,
-		]},
-		{name: "Web Development", content: [
-			<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />,
-			<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />,
-			<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />,
-			<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />,
-		]},
-		{name: "Game Development", content: [
-			<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />,
-			<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />,
-			<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />,
-		]},
-		{name: "Life Hacks", content: [
-			<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />,
-			<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />,
-		]},
-		{name: "Others", content: [
-			<BlogEmbed title="Road Map To A Web Developer" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel purus in lorem vestibulum lectus." id="hello" />,
-		]},
-	];
 	const [selectedCategories, setSelectedCategories] = useState(listOfCategories[0]);
 
 	return <div>
@@ -51,9 +25,72 @@ const Categories = () => {
 		<div className='grid grid-cols-3'>
 			<div className='absolute bg-container-color-2 lg:w-5/6 lg:h-full w-0 h-0 -z-10 m-10 rounded-3xl'></div>
 			{/* List out all the blogs in the selected category */}
-			{selectedCategories.content.map((blog, index) => blog)}
+			{selectedCategories.content.map((blog, index) => <BlogEmbed key={index} title={blog.title} description={blog.description} id={blog.id} />)}
 		</div>
 	</div>;
 };
+
+export async function getStaticProps() {
+	// get all blogs from database
+	const client = await clientPromise;
+	const db = client.db("Database");
+	const blogs = await db.collection("blogs").find().toArray();
+
+	// sort all blogs by category
+	var listOfCategories: any = [
+		{name: "Computer Programming", content: []},
+		{name: "Web Development", content: []},
+		{name: "Game Development", content: []},
+		{name: "Life Hacks", content: []},
+		{name: "Others", content: []},
+	];
+	blogs.forEach((blog: any, index: number) => {
+		switch (blog.tag) {
+			case "Computer Programming":
+				listOfCategories[0].content.push({
+					title: blog.title,
+					description: blog.description,
+					id: blog.id
+				});
+				break;
+			case "Web Development":
+				listOfCategories[1].content.push({
+					title: blog.title,
+					description: blog.description,
+					id: blog.id
+				});
+				break;
+			case "Game Development":
+				listOfCategories[2].content.push({
+					title: blog.title,
+					description: blog.description,
+					id: blog.id
+				});
+				break;
+			case "Life Hacks":
+				listOfCategories[3].content.push({
+					title: blog.title,
+					description: blog.description,
+					id: blog.id
+				});
+				break;
+			case "Others":
+				listOfCategories[4].content.push({
+					title: blog.title,
+					description: blog.description,
+					id: blog.id
+				});
+				break;
+			default:
+				break;
+		}
+	});
+
+	return {
+		props: {
+			listOfCategories: JSON.parse(JSON.stringify(listOfCategories))
+		}
+	}
+}
 
 export default Categories;
