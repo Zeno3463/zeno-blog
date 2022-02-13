@@ -1,19 +1,34 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { useState } from 'react';
 import BlogPreview from '../components/BlogPreview';
 import { v4 } from 'uuid';
+import clientPromise from '../lib/mongodb';
 
 interface ContentProps {
 	heading: string;
 	text: string;
 }
 
-const addNewBlog = () => {
+const addNewBlog = ({ password }) => {
 	////// VARIABLES //////
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [content, setContent] = useState<Array<ContentProps>>([]);
 	const [preview, setPreview] = useState<ReactElement | null>(null);
+
+	////// USE EFFECTS //////
+	useEffect(() => {
+		// if the user is not authenticated, ask for the password
+		if (localStorage.getItem('password') !== password) {
+			const passwordInput = prompt('Enter the admin password: ');
+			
+			// if the password is correct, show the form
+			if (passwordInput === password) localStorage.setItem('password', password);
+
+			// else, redirect to the home page
+			else window.location.href = '/';
+		}
+	}, [])
 
 	////// FUNCTIONS //////
 	const addNewSectionToContent = () => {
@@ -44,7 +59,7 @@ const addNewBlog = () => {
 				content,
 			})
 		}).then(() => {
-			console.log("Blog published");
+			window.location.href = '/';
 		})
 	}
 
@@ -70,5 +85,17 @@ const addNewBlog = () => {
 		}
 	</div>;
 };
+
+export async function getStaticProps() {
+	// get the password from the database
+	const client = await clientPromise;
+	const db = client.db("Database");
+	const password = await db.collection('password').find().toArray();
+	return {
+		props: {
+			password: password[0].adminPassword
+		}
+	}
+}
 
 export default addNewBlog;
