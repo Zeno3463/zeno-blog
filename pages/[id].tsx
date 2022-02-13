@@ -13,7 +13,9 @@ const Blog = () => {
 	const [title, setTitle] = useState('');
 	const [content, setContent] = useState<Array<ContentSegmentProps>>([]);
 
+	////// USE EFFECTS //////
 	useEffect(() => {
+		// get blog data on load
 		const func = async () => {
 			await fetch('/api/getBlogByID', {
 				method: 'POST',

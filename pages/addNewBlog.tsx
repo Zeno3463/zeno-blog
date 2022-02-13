@@ -40,8 +40,8 @@ const addNewBlog = () => {
 			body: JSON.stringify({
 				id: v4(),
 				title,
+				description,
 				content,
-				description
 			})
 		}).then(() => {
 			console.log("Blog published");
