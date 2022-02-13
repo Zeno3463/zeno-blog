@@ -1,6 +1,18 @@
 import BlogEmbed from "../components/BlogEmbed"
 import clientPromise from "../lib/mongodb"
 
+interface ContentProps {
+	heading: string,
+	text: string
+}
+
+interface BlogProps {
+	title: string,
+	content: Array<ContentProps>,
+	description: string,
+	id: string
+}
+
 export default function Home({blogs}) {
 	return (
 		<div>
@@ -21,7 +33,7 @@ export default function Home({blogs}) {
 				<br />
 				<div className='grid grid-cols-3'>
 					<div className='absolute bg-container-color-2 lg:w-5/6 lg:h-full w-0 h-0 -z-10 m-10 rounded-3xl'></div>
-					{blogs.map((blog) => <BlogEmbed key={blog.id} title={blog.title} description="hello" id={blog.id} />)}
+					{blogs.map((blog: BlogProps) => <BlogEmbed key={blog.id} title={blog.title} description={blog.description} id={blog.id} />)}
 				</div>
 			</div>
 		</div>

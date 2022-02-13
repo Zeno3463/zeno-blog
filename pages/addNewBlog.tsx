@@ -8,9 +8,10 @@ interface ContentProps {
 	text: string;
 }
 
-const addNewBlog = ({posts}) => {
+const addNewBlog = () => {
 	////// VARIABLES //////
 	const [title, setTitle] = useState('');
+	const [description, setDescription] = useState('');
 	const [content, setContent] = useState<Array<ContentProps>>([]);
 	const [preview, setPreview] = useState<ReactElement | null>(null);
 
@@ -40,6 +41,7 @@ const addNewBlog = ({posts}) => {
 				id: v4(),
 				title,
 				content,
+				description
 			})
 		}).then(() => {
 			console.log("Blog published");
@@ -53,8 +55,10 @@ const addNewBlog = ({posts}) => {
 		</div>
 		{preview ? preview :
 		<div>
-			<p>{posts}</p>
-			<input type="text" className='text-heading-color text-4xl font-bold bg-container-color-1 p-5 ml-4 focus:outline-none' onChange={(e) => setTitle(e.target.value)} value={title} />
+			<div className='flex flex-col'>
+				<input type="text" placeholder='Title' className='text-heading-color text-4xl font-bold bg-container-color-1 p-5 m-1 ml-4 focus:outline-none' onChange={(e) => setTitle(e.target.value)} value={title} />
+				<input type="text" placeholder='Description' className='text-text-color text-xl font-medium bg-container-color-1 p-5 m-1 ml-4 focus:outline-none' onChange={(e) => setDescription(e.target.value)} value={description} />
+			</div>
 			<div className='flex flex-col'>
 				{content.map((contentSection, index) => <div key={index} className='flex flex-col mb-5'>
 					<input className='mb-2 p-2 font-semibold focus:outline-none text-heading-color bg-container-color-2' type="text" onChange={(e) => editContentSection(index, e.target.value, contentSection.text)} value={contentSection.heading} />
