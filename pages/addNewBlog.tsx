@@ -13,6 +13,7 @@ const addNewBlog = ({ password }) => {
 	////// VARIABLES //////
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
+	const [tag, setTag] = useState('Others');
 	const [content, setContent] = useState<Array<ContentProps>>([]);
 	const [preview, setPreview] = useState<ReactElement | null>(null);
 
@@ -56,6 +57,7 @@ const addNewBlog = ({ password }) => {
 				id: v4(),
 				title,
 				description,
+				tag,
 				content,
 			})
 		}).then(() => {
@@ -73,6 +75,13 @@ const addNewBlog = ({ password }) => {
 			<div className='flex flex-col'>
 				<input type="text" placeholder='Title' className='text-heading-color text-4xl font-bold bg-container-color-1 p-5 m-1 ml-4 focus:outline-none' onChange={(e) => setTitle(e.target.value)} value={title} />
 				<input type="text" placeholder='Description' className='text-text-color text-xl font-medium bg-container-color-1 p-5 m-1 ml-4 focus:outline-none' onChange={(e) => setDescription(e.target.value)} value={description} />
+				<select className='m-1 ml-4 bg-container-color-1 text-text-color p-3 outline-none' onChange={(e) => setTag(e.target.value)}>
+					<option value="Computer Programming">Computer Programming</option>
+					<option value="Web Development">Web Development</option>
+					<option value="Game Development">Game Development</option>
+					<option value="Life Hacks">Life Hacks</option>
+					<option value="Others">Others</option>
+				</select>
 			</div>
 			<div className='flex flex-col'>
 				{content.map((contentSection, index) => <div key={index} className='flex flex-col mb-5'>
