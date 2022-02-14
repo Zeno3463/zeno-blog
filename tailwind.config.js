@@ -9,6 +9,7 @@ module.exports = {
       'text-color': '#ffffff',
       'container-color-1': '#2D2D2D',
       'container-color-2': '#1A1A1A',
+      'warning-color': '#E50000',
     },
   },
   plugins: [],

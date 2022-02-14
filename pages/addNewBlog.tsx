@@ -21,10 +21,8 @@ const addNewBlog = ({ password }) => {
 	useEffect(() => {
 		// if the user is not authenticated, ask for the password
 		if (localStorage.getItem('password') !== password) {
-			const passwordInput = prompt('Enter the admin password: ');
-			
 			// if the password is correct, show the form
-			if (passwordInput === password) localStorage.setItem('password', password);
+			if (prompt('Enter the admin password: ') === password) localStorage.setItem('password', password);
 
 			// else, redirect to the home page
 			else window.location.href = '/';
@@ -59,6 +57,7 @@ const addNewBlog = ({ password }) => {
 				description,
 				tag,
 				content,
+				views: 0
 			})
 		}).then(() => {
 			window.location.href = '/';

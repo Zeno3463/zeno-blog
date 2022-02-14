@@ -12,6 +12,7 @@ const Blog = () => {
 	const { id } = router.query;
 	const [title, setTitle] = useState('');
 	const [content, setContent] = useState<Array<ContentSegmentProps>>([]);
+	const [dataRetrieved, setDataRetrieved] = useState(false);
 
 	////// USE EFFECTS //////
 	useEffect(() => {
@@ -21,12 +22,13 @@ const Blog = () => {
 				method: 'POST',
 				body: JSON.stringify({id: id})
 			}).then(res => res.json()).then(res => {
+				setDataRetrieved(true);
 				setTitle(res.title);
 				setContent(res.content);
 			})
 		}
 
-		func();
+		if (!dataRetrieved) func();
 	})
 
 	return <div>
