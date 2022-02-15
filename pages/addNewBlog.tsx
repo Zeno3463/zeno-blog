@@ -9,7 +9,7 @@ interface ContentProps {
 	text: string;
 }
 
-const addNewBlog = ({ password }) => {
+const AddNewBlog = ({ password }) => {
 	////// VARIABLES //////
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
@@ -106,4 +106,4 @@ export async function getStaticProps() {
 	}
 }
 
-export default addNewBlog;
+export default AddNewBlog;
