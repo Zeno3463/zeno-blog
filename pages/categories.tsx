@@ -6,7 +6,7 @@ const Categories = ({listOfCategories}) => {
 	////// VARIABLES //////
 	const [selectedCategories, setSelectedCategories] = useState(listOfCategories[0]);
 
-	return <div>
+	return <div className='animate-fadeIn'>
 		<br />
 		<h1 className='text-text-color lg:text-7xl font-extrabold'>Categories</h1>
 		<br />

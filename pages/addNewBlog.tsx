@@ -13,7 +13,7 @@ const addNewBlog = ({ password }) => {
 	////// VARIABLES //////
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
-	const [tag, setTag] = useState('Others');
+	const [tag, setTag] = useState('Computer Programming');
 	const [content, setContent] = useState<Array<ContentProps>>([]);
 	const [preview, setPreview] = useState<ReactElement | null>(null);
 

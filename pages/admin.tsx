@@ -26,7 +26,7 @@ const Admin = ({password, blogs}) => {
 
 	return <div>
 		<div className='h-screen flex justify-around flex-col'>
-			<div className='w-6/12'>
+			<div className='w-6/12 animate-fadeIn'>
 				<h1 className='text-heading-color font-extrabold lg:text-7xl'>ADMIN PANEL</h1>
 				<br />
 				<p className='text-text-color font-light'>Welcome, Zeno!</p>
