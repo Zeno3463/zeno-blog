@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import BlogEmbed from "../components/BlogEmbed"
 import clientPromise from "../lib/mongodb"
 
@@ -13,7 +14,24 @@ interface BlogProps {
 	id: string
 }
 
-export default function Home({blogs}) {
+export default function Home() {
+	////// VARIABLES //////
+	const [blogs, setBlogs] = useState([]);
+
+	////// USE EFFECT //////
+	useEffect(() => {
+		// get all blogs
+		const func = async () => {
+			await fetch('/api/getAllBlogs', {
+				method: 'POST',
+			}).then(res => res.json()).then(res => {
+				setBlogs(res);
+			})
+		}
+
+		func();
+	}, [])
+
 	return (
 		<div>
 			<div className='h-screen flex justify-around flex-col'>
@@ -38,15 +56,4 @@ export default function Home({blogs}) {
 			</div>
 		</div>
 	)
-}
-
-export async function getStaticProps() {
-	const client = await clientPromise;
-	const db = client.db("Database");
-	const blogs = await db.collection('blogs').find().toArray();
-	return {
-		props: {
-			blogs: JSON.parse(JSON.stringify(blogs))
-		}
-	}
 }
