@@ -108,7 +108,7 @@ const Categories = () => {
 		<ul className='text-text-color flex'>
 			{/* List out all categories' name */}
 			{listOfCategories.map((category, index) => 
-			<li key={index} className='border m-0 p-2 pl-20 pr-20'>
+			<li key={index} className='border m-0 p-2 pl-14 pr-14'>
 				<button className='transition-all hover:text-heading-color' onClick={() => setSelectedCategories(category)}>
 					{category.name === selectedCategories.name ? 
 					<p className='text-heading-color font-normal'>{category.name}</p> : 
