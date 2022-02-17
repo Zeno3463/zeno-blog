@@ -1,7 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import clientPromise from '../lib/mongodb'
 
-const Admin = ({password, blogs}) => {
+const Admin = ({password}) => {
+	////// VARIABLES //////
+	const [blogs, setBlogs] = useState<Array<any>>([]);
+
 	////// USE EFFECTS //////
 	useEffect(() => {
 		// if the user is not authenticated, ask for the password
@@ -12,6 +15,16 @@ const Admin = ({password, blogs}) => {
 			// else, redirect to the home page
 			else window.location.href = '/'
 		}
+
+		const func = async () => {
+			await fetch('/api/getAllBlogs', {
+				method: 'POST',
+			}).then(res => res.json()).then(res => {
+				setBlogs(res);
+			})
+		}
+
+		func();
 	}, [])
 
 	////// FUNCTIONS //////
@@ -55,15 +68,13 @@ const Admin = ({password, blogs}) => {
 }
 
 export async function getStaticProps() {
-	// get the password and blogs from the database
+	// get the password from the database
 	const client = await clientPromise;
 	const db = client.db("Database");
 	const password = await db.collection("password").find().toArray();
-	const blogs = await db.collection("blogs").find().toArray();
 	return {
 		props: {
-			password: password[0].adminPassword,
-			blogs: JSON.parse(JSON.stringify(blogs))
+			password: password[0].adminPassword
 		}
 	}
 }
