@@ -77,6 +77,7 @@ const AddNewBlog = ({ password }) => {
 				<select className='m-1 ml-4 bg-container-color-1 text-text-color p-3 outline-none' onChange={(e) => setTag(e.target.value)}>
 					<option value="Computer Programming">Computer Programming</option>
 					<option value="Web Development">Web Development</option>
+					<option value="Blockchain Development">Blockchain Development</option>
 					<option value="Game Development">Game Development</option>
 					<option value="Life Hacks">Life Hacks</option>
 					<option value="Others">Others</option>

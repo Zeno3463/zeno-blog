@@ -21,6 +21,7 @@ const Categories = () => {
 	const [listOfCategories, setListOfCategories] = useState<ListOfCategoriesProps | any>([
 		{name: "Computer Programming", content: []},
 		{name: "Web Development", content: []},
+		{name: "Blockchain Development", content: []},
 		{name: "Game Development", content: []},
 		{name: "Life Hacks", content: []},
 		{name: "Others", content: []},
@@ -36,6 +37,7 @@ const Categories = () => {
 				var list: any = [
 					{name: "Computer Programming", content: []},
 					{name: "Web Development", content: []},
+					{name: "Blockchain Development", content: []},
 					{name: "Game Development", content: []},
 					{name: "Life Hacks", content: []},
 					{name: "Others", content: []},
@@ -58,22 +60,29 @@ const Categories = () => {
 								id: blog.id
 							});
 							break;
-						case "Game Development":
+						case "Blockchain Development":
 							list[2].content.push({
 								title: blog.title,
 								description: blog.description,
 								id: blog.id
 							});
 							break;
-						case "Life Hacks":
+						case "Game Development":
 							list[3].content.push({
 								title: blog.title,
 								description: blog.description,
 								id: blog.id
 							});
 							break;
-						case "Others":
+						case "Life Hacks":
 							list[4].content.push({
+								title: blog.title,
+								description: blog.description,
+								id: blog.id
+							});
+							break;
+						case "Others":
+							list[5].content.push({
 								title: blog.title,
 								description: blog.description,
 								id: blog.id
