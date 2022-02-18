@@ -60,7 +60,7 @@ const Admin = ({password}) => {
 			{blogs.map((blog, index) => <tr key={index} className='text-text-color'>
 				<td className='p-3 border'>{blog.title}</td>
 				<td className='p-3 border'>{blog.description}</td>
-				<td className='p-3 border'>{blog.views}</td>
+				<td className='p-3 border'>{blog.views / 3}</td>
 				<td className='p-3 border'><button onClick={() => deleteBlog(blog.id)} className='bg-warning-color p-2 rounded-lg transition-all hover:opacity-50'>Delete</button></td>
 			</tr>)}
 		</table>

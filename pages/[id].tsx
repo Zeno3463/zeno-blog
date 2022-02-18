@@ -14,6 +14,7 @@ const Blog = () => {
 	const [title, setTitle] = useState('');
 	const [content, setContent] = useState<Array<ContentSegmentProps>>([]);
 	const [dataRetrieved, setDataRetrieved] = useState(false);
+	const [viewCountUpdated, setViewCountUpdated] =	useState(false);
 
 	////// USE EFFECTS //////
 	useEffect(() => {
@@ -30,6 +31,17 @@ const Blog = () => {
 		}
 
 		if (!dataRetrieved) func();
+	})
+	useEffect(() => {
+		// update view count after successfully retrieving blog data
+		const func = async () => {
+			await fetch('/api/addViewCount', {
+				method: 'POST',
+				body: JSON.stringify({id: id})
+			}).then(() => setViewCountUpdated(true));
+		}
+
+		if (!viewCountUpdated && dataRetrieved) func();
 	})
 
 	return <div>
