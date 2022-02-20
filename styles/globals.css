@@ -9,3 +9,7 @@
 body {
 	background-color: #141313;
 }
+
+a {
+	@apply font-semibold underline text-heading-color
+}
