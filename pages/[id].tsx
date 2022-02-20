@@ -59,8 +59,7 @@ const Blog = () => {
 
 			{/* Display the content of the blog */}
 			<div>
-				<div className='grid grid-cols-1'>
-					<div className='absolute bg-container-color-2 lg:w-5/6 lg:h-full w-0 h-0 -z-10 m-10 rounded-3xl'></div>
+				<div className='grid grid-cols-1 bg-container-color-2 rounded-lg'>
 					{content.map((contentSegment, index) => <div className='flex' key={index}>
 						{index % 2 !== 0 ? <div className='flex-none lg:w-5/12'></div> : null}
 						<div className='bg-container-color-1 flex-1 rounded-3xl pl-5 pr-5 pt-10 pb-10 shadow-lg bg-opacity-10 backdrop-blur-sm transition-all hover:z-10 hover:scale-110'>

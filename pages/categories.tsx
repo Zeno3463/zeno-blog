@@ -118,7 +118,6 @@ const Categories = () => {
 			)}
 		</ul>
 		<div className='grid grid-cols-3'>
-			<div className='absolute bg-container-color-2 lg:w-5/6 lg:h-full w-0 h-0 -z-10 m-10 rounded-3xl'></div>
 			{/* List out all the blogs in the selected category */}
 			{selectedCategories.content.map((blog: any, index) => <BlogEmbed key={index} title={blog.title} description={blog.description} id={blog.id} />)}
 		</div>
