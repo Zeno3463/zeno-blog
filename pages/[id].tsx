@@ -3,25 +3,21 @@ import { useRouter } from 'next/router';
 import LoadingScreen from '../components/LoadingScreen';
 import clientPromise from '../lib/mongodb';
 
-interface ContentSegmentProps {
-	heading: string;
-	text: string;
-}
-
 const Blog = ({id, title, content}: any) => {
 	////// VARIABLES //////
 	const [viewCountUpdated, setViewCountUpdated] =	useState(false);
-	const [contentDisplay, setContentDisplay] = useState<any>();
+	const [contentDisplay, setContentDisplay] = useState<any>(); // contentDisplay is a copy of the content variable. The content variable cannot be used directly because it will result in an error with the dangerouslySetInnerHTML.
 
 	useEffect(() => {
-		// update view count after successfully retrieving blog data
+		setContentDisplay(content);
+
+		// update view count
 		const func = async () => {
 			await fetch('/api/addViewCount', {
 				method: 'POST',
 				body: JSON.stringify({id: id})
 			}).then(() => {
 				setViewCountUpdated(true)
-				setContentDisplay(content);
 			});
 		}
 

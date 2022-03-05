@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import { BlogProps } from '../interfaces/interface';
 import clientPromise from '../lib/mongodb'
 
-const Admin = ({password, blogs}) => {
+const Admin = ({password, blogs}: {password: string, blogs: Array<BlogProps>}) => {
 	////// USE EFFECTS //////
 	useEffect(() => {
 		// if the user is not authenticated, ask for the password

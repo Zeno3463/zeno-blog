@@ -3,11 +3,7 @@ import { useState } from 'react';
 import BlogPreview from '../components/BlogPreview';
 import { v4 } from 'uuid';
 import clientPromise from '../lib/mongodb';
-
-interface ContentProps {
-	heading: string;
-	text: string;
-}
+import { ContentProps } from '../interfaces/interface';
 
 const AddNewBlog = ({ password }) => {
 	////// VARIABLES //////

@@ -1,18 +1,7 @@
 import { useEffect, useState } from "react";
 import BlogEmbed from "../components/BlogEmbed"
 import clientPromise from "../lib/mongodb"
-
-interface ContentProps {
-	heading: string,
-	text: string
-}
-
-interface BlogProps {
-	title: string,
-	content: Array<ContentProps>,
-	description: string,
-	id: string
-}
+import { BlogProps } from '../interfaces/interface';
 
 export default function Home({blogs}: {blogs: Array<BlogProps>}) {
 	return (

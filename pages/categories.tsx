@@ -1,17 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import BlogEmbed from '../components/BlogEmbed';
 import clientPromise from '../lib/mongodb';
-
-interface BlogProps {
-	title: string,
-	description: string,
-	id: string
-}
-
-interface ListOfCategoriesProps {
-	name: string,
-	content: Array<BlogProps>
-}
+import { ListOfCategoriesProps } from '../interfaces/interface';
 
 const Categories = ({listOfCategories}: {listOfCategories: Array<ListOfCategoriesProps> | any}) => {
 	////// VARIABLES //////
