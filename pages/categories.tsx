@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import BlogEmbed from '../components/BlogEmbed';
 import clientPromise from '../lib/mongodb';
 import { ListOfCategoriesProps } from '../interfaces/interface';

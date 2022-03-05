@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import LoadingScreen from '../components/LoadingScreen';
 import clientPromise from '../lib/mongodb';
 
 const Blog = ({id, title, content}: any) => {
@@ -25,7 +23,7 @@ const Blog = ({id, title, content}: any) => {
 	})
 
 	return <div>
-		{title === '' ? <LoadingScreen /> : <div>
+		<div>
 			{/* Display the title of the blog */}
 			<div className='h-screen flex justify-around flex-col'>
 				<div className='flex justify-center'>
@@ -51,7 +49,6 @@ const Blog = ({id, title, content}: any) => {
 				</div>
 			</div>
 		</div>
-		}
 	</div>;
 };
 
