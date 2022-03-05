@@ -14,24 +14,7 @@ interface BlogProps {
 	id: string
 }
 
-export default function Home() {
-	////// VARIABLES //////
-	const [blogs, setBlogs] = useState([]);
-
-	////// USE EFFECT //////
-	useEffect(() => {
-		// get all blogs
-		const func = async () => {
-			await fetch('/api/getAllBlogs', {
-				method: 'POST',
-			}).then(res => res.json()).then(res => {
-				setBlogs(res);
-			})
-		}
-
-		func();
-	}, [])
-
+export default function Home({blogs}: {blogs: Array<BlogProps>}) {
 	return (
 		<div>
 			<div className='h-screen flex justify-around flex-col'>
@@ -55,4 +38,16 @@ export default function Home() {
 			</div>
 		</div>
 	)
+}
+
+export async function getStaticProps() {
+	const client = await clientPromise;
+	const db = client.db("Database");
+	const blogs = await db.collection("blogs").find({}).toArray();
+	return {
+		props: {
+			blogs: JSON.parse(JSON.stringify(blogs))
+		},
+		revalidate: 60
+	}
 }
