@@ -8,41 +8,24 @@ interface ContentSegmentProps {
 	text: string;
 }
 
-const Blog = () => {
+const Blog = ({id, title, content}: any) => {
 	////// VARIABLES //////
-	const router = useRouter();
-	const { id } = router.query;
-	const [title, setTitle] = useState('');
-	const [content, setContent] = useState<Array<ContentSegmentProps>>([]);
-	const [dataRetrieved, setDataRetrieved] = useState(false);
 	const [viewCountUpdated, setViewCountUpdated] =	useState(false);
+	const [contentDisplay, setContentDisplay] = useState<any>();
 
-	////// USE EFFECTS //////
-	useEffect(() => {
-		// get blog data on load
-		const func = async () => {
-			await fetch('/api/getBlogByID', {
-				method: 'POST',
-				body: JSON.stringify({id: id})
-			}).then(res => res.json()).then(res => {
-				setDataRetrieved(true);
-				setTitle(res.title);
-				setContent(res.content);
-			})
-		}
-
-		if (!dataRetrieved) func();
-	})
 	useEffect(() => {
 		// update view count after successfully retrieving blog data
 		const func = async () => {
 			await fetch('/api/addViewCount', {
 				method: 'POST',
 				body: JSON.stringify({id: id})
-			}).then(() => setViewCountUpdated(true));
+			}).then(() => {
+				setViewCountUpdated(true)
+				setContentDisplay(content);
+			});
 		}
 
-		if (!viewCountUpdated && dataRetrieved) func();
+		if (!viewCountUpdated) func();
 	})
 
 	return <div>
@@ -61,7 +44,7 @@ const Blog = () => {
 			{/* Display the content of the blog */}
 			<div>
 				<div className='grid grid-cols-1 bg-container-color-2 rounded-lg'>
-					{content.map((contentSegment, index) => <div className='flex' key={index}>
+					{contentDisplay?.map((contentSegment, index) => <div className='flex' key={index}>
 						{index % 2 !== 0 ? <div className='flex-none lg:w-5/12'></div> : null}
 						<div className='bg-container-color-1 flex-1 rounded-3xl pl-5 pr-5 pt-10 pb-10 shadow-lg bg-opacity-10 backdrop-blur-sm transition-all hover:z-10 hover:scale-110'>
 							<h1 className='text-heading-color font-bold lg:text-4xl overflow-clip'>{contentSegment.heading}</h1>
@@ -83,6 +66,20 @@ export const getStaticPaths = async () => {
 	return {
 		paths: blogs.map(blog => ({params: {id: blog.id}})),
 		fallback: false
+	}
+}
+
+export const getStaticProps = async ({params}) => {
+	const client = await clientPromise;
+	const db = client.db('Database');
+	const blogs = await db.collection('blogs').find({id: params.id}).toArray();
+	const blog = blogs[0];
+	return {
+		props: {
+			id: params.id,
+			title: blog.title,
+			content: blog.content
+		}
 	}
 }
 
