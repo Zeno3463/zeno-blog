@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import clientPromise from '../lib/mongodb'
 
-const Admin = ({password}) => {
-	////// VARIABLES //////
-	const [blogs, setBlogs] = useState<Array<any>>([]);
-
+const Admin = ({password, blogs}) => {
 	////// USE EFFECTS //////
 	useEffect(() => {
 		// if the user is not authenticated, ask for the password
@@ -15,16 +12,6 @@ const Admin = ({password}) => {
 			// else, redirect to the home page
 			else window.location.href = '/'
 		}
-
-		const func = async () => {
-			await fetch('/api/getAllBlogs', {
-				method: 'POST',
-			}).then(res => res.json()).then(res => {
-				setBlogs(res);
-			})
-		}
-
-		func();
 	}, [])
 
 	////// FUNCTIONS //////
@@ -60,7 +47,7 @@ const Admin = ({password}) => {
 			{blogs.map((blog, index) => <tr key={index} className='text-text-color'>
 				<td className='p-3 border'>{blog.title}</td>
 				<td className='p-3 border'>{blog.description}</td>
-				<td className='p-3 border'>{blog.views / 3}</td>
+				<td className='p-3 border'>{Math.round(blog.views / 3)}</td>
 				<td className='p-3 border'><button onClick={() => deleteBlog(blog.id)} className='bg-warning-color p-2 rounded-lg transition-all hover:opacity-50'>Delete</button></td>
 			</tr>)}
 		</table>
@@ -72,9 +59,11 @@ export async function getStaticProps() {
 	const client = await clientPromise;
 	const db = client.db("Database");
 	const password = await db.collection("password").find().toArray();
+	const blogs = await db.collection("blogs").find().toArray();
 	return {
 		props: {
-			password: password[0].adminPassword
+			password: password[0].adminPassword,
+			blogs: JSON.parse(JSON.stringify(blogs))
 		}
 	}
 }
