@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import BlogEmbed from '../components/BlogEmbed';
+import clientPromise from '../lib/mongodb';
 
 interface BlogProps {
 	title: string,
@@ -12,94 +13,12 @@ interface ListOfCategoriesProps {
 	content: Array<BlogProps>
 }
 
-const Categories = () => {
+const Categories = ({listOfCategories}: {listOfCategories: Array<ListOfCategoriesProps> | any}) => {
 	////// VARIABLES //////
 	const [selectedCategories, setSelectedCategories] = useState({
 		name: 'Computer Programming',
 		content: []
 	});
-	const [listOfCategories, setListOfCategories] = useState<ListOfCategoriesProps | any>([
-		{name: "Computer Programming", content: []},
-		{name: "Web Development", content: []},
-		{name: "Blockchain Development", content: []},
-		{name: "Game Development", content: []},
-		{name: "Life Hacks", content: []},
-		{name: "Others", content: []},
-	]);
-
-	////// USE EFFECT //////
-	useEffect(() => {
-		// get all blogs
-		const func = async () => {
-			await fetch('/api/getAllBlogs', {
-				method: 'POST',
-			}).then(res => res.json()).then(res => {
-				var list: any = [
-					{name: "Computer Programming", content: []},
-					{name: "Web Development", content: []},
-					{name: "Blockchain Development", content: []},
-					{name: "Game Development", content: []},
-					{name: "Life Hacks", content: []},
-					{name: "Others", content: []},
-				];
-				
-				// filter the blogs by category
-				res.forEach((blog: any, index: number) => {
-					switch (blog.tag) {
-						case "Computer Programming":
-							list[0].content.push({
-								title: blog.title,
-								description: blog.description,
-								id: blog.id
-							});
-							break;
-						case "Web Development":
-							list[1].content.push({
-								title: blog.title,
-								description: blog.description,
-								id: blog.id
-							});
-							break;
-						case "Blockchain Development":
-							list[2].content.push({
-								title: blog.title,
-								description: blog.description,
-								id: blog.id
-							});
-							break;
-						case "Game Development":
-							list[3].content.push({
-								title: blog.title,
-								description: blog.description,
-								id: blog.id
-							});
-							break;
-						case "Life Hacks":
-							list[4].content.push({
-								title: blog.title,
-								description: blog.description,
-								id: blog.id
-							});
-							break;
-						case "Others":
-							list[5].content.push({
-								title: blog.title,
-								description: blog.description,
-								id: blog.id
-							});
-							break;
-						default:
-							break;
-					}
-				});
-
-				setListOfCategories(list);
-				setSelectedCategories(list[0]);
-			})
-		}
-
-		func();
-	}, [])
 
 	return <div className='animate-fadeIn'>
 		<br />
@@ -123,5 +42,75 @@ const Categories = () => {
 		</div>
 	</div>;
 };
+
+export const getStaticProps = async () => {
+	const client = await clientPromise;
+	const db = client.db('Database');
+	const blogs = await db.collection('blogs').find({}).toArray();
+	var list: any = [
+		{name: "Computer Programming", content: []},
+		{name: "Web Development", content: []},
+		{name: "Blockchain Development", content: []},
+		{name: "Game Development", content: []},
+		{name: "Life Hacks", content: []},
+		{name: "Others", content: []},
+	];
+	
+	// filter the blogs by category
+	blogs.forEach((blog: any, index: number) => {
+		switch (blog.tag) {
+			case "Computer Programming":
+				list[0].content.push({
+					title: blog.title,
+					description: blog.description,
+					id: blog.id
+				});
+				break;
+			case "Web Development":
+				list[1].content.push({
+					title: blog.title,
+					description: blog.description,
+					id: blog.id
+				});
+				break;
+			case "Blockchain Development":
+				list[2].content.push({
+					title: blog.title,
+					description: blog.description,
+					id: blog.id
+				});
+				break;
+			case "Game Development":
+				list[3].content.push({
+					title: blog.title,
+					description: blog.description,
+					id: blog.id
+				});
+				break;
+			case "Life Hacks":
+				list[4].content.push({
+					title: blog.title,
+					description: blog.description,
+					id: blog.id
+				});
+				break;
+			case "Others":
+				list[5].content.push({
+					title: blog.title,
+					description: blog.description,
+					id: blog.id
+				});
+				break;
+			default:
+				break;
+		}
+	});
+	return {
+		props: {
+			listOfCategories: list
+		},
+		revalidate: 60
+	}
+}
 
 export default Categories;

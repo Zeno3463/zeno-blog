@@ -40,7 +40,7 @@ export default function Home({blogs}: {blogs: Array<BlogProps>}) {
 	)
 }
 
-export async function getStaticProps() {
+export const getStaticProps = async () => {
 	const client = await clientPromise;
 	const db = client.db("Database");
 	const blogs = await db.collection("blogs").find({}).toArray();

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import LoadingScreen from '../components/LoadingScreen';
+import clientPromise from '../lib/mongodb';
 
 interface ContentSegmentProps {
 	heading: string;
@@ -74,5 +75,15 @@ const Blog = () => {
 		}
 	</div>;
 };
+
+export const getStaticPaths = async () => {
+	const client = await clientPromise;
+	const db = client.db('Database');
+	const blogs = await db.collection('blogs').find({}).toArray();
+	return {
+		paths: blogs.map(blog => ({params: {id: blog.id}})),
+		fallback: false
+	}
+}
 
 export default Blog;
