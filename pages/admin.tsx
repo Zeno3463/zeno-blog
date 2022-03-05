@@ -64,7 +64,8 @@ export async function getStaticProps() {
 		props: {
 			password: password[0].adminPassword,
 			blogs: JSON.parse(JSON.stringify(blogs))
-		}
+		},
+		revalidate: 60
 	}
 }
 

@@ -65,7 +65,7 @@ export const getStaticPaths = async () => {
 	const blogs = await db.collection('blogs').find({}).toArray();
 	return {
 		paths: blogs.map(blog => ({params: {id: blog.id}})),
-		fallback: false
+		fallback: true
 	}
 }
 
